@@ -49,12 +49,12 @@ __u16 cec_key_map[128] = {
     0 , 0, 0, 0, 0, 0, 0, 0,//0x30
     0 , 0, 0, 0, 0, 0, 0, 0,
     
-    KEY_POWER , KEY_VOLUMEUP, KEY_VOLUMEDOWN, KEY_MUTE, KEY_PLAYPAUSE, KEY_STOP, KEY_PLAYPAUSE, 0,//0x40
+    0 , KEY_VOLUMEUP, KEY_VOLUMEDOWN, KEY_MUTE, KEY_PLAYPAUSE, KEY_STOP, KEY_PLAYPAUSE, 0,//0x40
     KEY_REWIND, KEY_FASTFORWARD, 0, KEY_PREVIOUSSONG, KEY_NEXTSONG, 0, 0, 0,
     0 , 0, 0, KEY_PLAYPAUSE, 0, 0, 0, 0,//0x50
     0 , 0, 0, 0, 0, 0, 0, 0,
     KEY_PLAYCD, KEY_PLAYPAUSE, KEY_RECORD, KEY_PAUSECD, KEY_STOPCD, KEY_MUTE, 0, KEY_TUNER,//0x60
-    0 , KEY_MEDIA, 0, 0, KEY_POWER, KEY_POWER, 0, 0,
+    0 , KEY_MEDIA, 0, 0, 0, 0, 0, 0,
     0 , KEY_BLUE, KEY_RED, KEY_GREEN, KEY_YELLOW, 0, 0, 0,//0x70
     0 , 0, 0, 0, 0, 0, 0, 0,
 };
@@ -154,10 +154,10 @@ void cec_user_control_released_irq(void)
 void cec_standby_irq(void)
 {
     printk("CEC: System will be in standby mode\n");
-    input_event(remote_cec_dev, EV_KEY, KEY_POWER, 1);
-    input_sync(remote_cec_dev);
-    input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
-    input_sync(remote_cec_dev);
+   // input_event(remote_cec_dev, EV_KEY, KEY_POWER, 1);
+   // input_sync(remote_cec_dev);
+   // input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
+  //  input_sync(remote_cec_dev);
     
     //cec_send_event_irq();
 }
@@ -181,10 +181,10 @@ void cec_user_control_released(cec_rx_message_t* pcec_message)
 void cec_standby(cec_rx_message_t* pcec_message)
 {
     printk("CEC: System will be in standby mode\n");
-    input_event(remote_cec_dev, EV_KEY, KEY_POWER, 1);
-    input_sync(remote_cec_dev);
-    input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
-    input_sync(remote_cec_dev);
+ //   input_event(remote_cec_dev, EV_KEY, KEY_POWER, 1);
+ //   input_sync(remote_cec_dev);
+ //   input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
+ //   input_sync(remote_cec_dev);
     
     //cec_send_event(pcec_message);
 }
