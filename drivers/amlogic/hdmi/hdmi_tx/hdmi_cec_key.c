@@ -159,7 +159,7 @@ void cec_standby_irq(void)
     input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
     input_sync(remote_cec_dev);
     
-    cec_send_event_irq();
+   // cec_send_event_irq();
 }
 
 void cec_user_control_pressed(cec_rx_message_t* pcec_message)
