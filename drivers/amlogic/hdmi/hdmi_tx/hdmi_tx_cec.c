@@ -623,7 +623,7 @@ void cec_input_handle_message(void)
         break;
         */
      case CEC_OC_STANDBY:  	  
-        cec_standby_irq();
+        //cec_standby_irq();
         break;       
     case CEC_OC_USER_CONTROL_PRESSED:
         cec_user_control_pressed_irq();
