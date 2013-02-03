@@ -49,12 +49,12 @@ __u16 cec_key_map[128] = {
     0 , 0, 0, 0, 0, 0, 0, 0,//0x30
     0 , 0, 0, 0, 0, 0, 0, 0,
     
-    0 , KEY_VOLUMEUP, KEY_VOLUMEDOWN, KEY_MUTE, KEY_PLAYPAUSE, KEY_STOP, KEY_PLAYPAUSE, 0,//0x40
+    KEY_POWER , KEY_VOLUMEUP, KEY_VOLUMEDOWN, KEY_MUTE, KEY_PLAYPAUSE, KEY_STOP, KEY_PLAYPAUSE, 0,//0x40
     KEY_REWIND, KEY_FASTFORWARD, 0, KEY_PREVIOUSSONG, KEY_NEXTSONG, 0, 0, 0,
     0 , 0, 0, KEY_PLAYPAUSE, 0, 0, 0, 0,//0x50
     0 , 0, 0, 0, 0, 0, 0, 0,
     KEY_PLAYCD, KEY_PLAYPAUSE, KEY_RECORD, KEY_PAUSECD, KEY_STOPCD, KEY_MUTE, 0, KEY_TUNER,//0x60
-    0 , KEY_MEDIA, 0, 0, 0, 0, 0, 0,
+    0 , KEY_MEDIA, 0, 0, KEY_POWER, KEY_POWER, 0, 0,
     0 , KEY_BLUE, KEY_RED, KEY_GREEN, KEY_YELLOW, 0, 0, 0,//0x70
     0 , 0, 0, 0, 0, 0, 0, 0,
 };
@@ -71,16 +71,16 @@ void cec_send_event(cec_rx_message_t* pcec_message)
     /* parse message */
     if ((!pcec_message) || (check_cec_msg_valid(pcec_message) == 0)) return;
 
-    initiator   = pcec_message->content.msg.header >> 4;
-    follower    = pcec_message->content.msg.header & 0x0f;
-    opcode      = pcec_message->content.msg.opcode;   
+    initiator = pcec_message->content.msg.header >> 4;
+    follower = pcec_message->content.msg.header & 0x0f;
+    opcode = pcec_message->content.msg.opcode;
     operand_num = pcec_message->operand_num;
-    brdcst      = (follower == 0x0f);
-    msg_length  = pcec_message->msg_length;
+    brdcst = (follower == 0x0f);
+    msg_length = pcec_message->msg_length;
     
     for (i = 0; i < operand_num; i++ ) {
-       operands[i] = pcec_message->content.msg.operands[i]; 
-       hdmitx_cec_dbg_print("\n--------operands[%d]:%u---------\n", i, operands[i]);       
+       operands[i] = pcec_message->content.msg.operands[i];
+       hdmitx_cec_dbg_print("\n--------operands[%d]:%u---------\n", i, operands[i]);
     }
     if(cec_key_flag) {
         input_event(remote_cec_dev, EV_KEY, cec_key_map[operands[0]], 1);
@@ -91,7 +91,7 @@ void cec_send_event(cec_rx_message_t* pcec_message)
         input_event(remote_cec_dev, EV_KEY, cec_key_map[operands[0]], 0);
         input_sync(remote_cec_dev);
         hdmitx_cec_dbg_print("\n--------cec_key_map[operands[0]]:%d---------\n",cec_key_map[operands[0]]);
-    }   
+    }
 
     hdmitx_cec_dbg_print("\n--------cec_send_event---------\n");
 }
@@ -100,19 +100,19 @@ void cec_send_event(cec_rx_message_t* pcec_message)
 void cec_send_event_irq(void)
 {
     int i;
-    unsigned char   operand_num_irq;
+    unsigned char operand_num_irq;
     unsigned char operands_irq[14];
-    //unsigned char  opcode_irq;    
-    //unsigned char   msg_length_irq;
+    //unsigned char opcode_irq;
+    //unsigned char msg_length_irq;
     
-    // msg_length_irq  = cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].msg_length;           
-    //opcode_irq	= cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].content.msg.opcode;
+    // msg_length_irq = cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].msg_length;
+    //opcode_irq = cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].content.msg.opcode;
          
     operand_num_irq = cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].operand_num;
     for (i = 0; i < operand_num_irq; i++ )
     {
-        operands_irq[i] = cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].content.msg.operands[i]; 
-        hdmitx_cec_dbg_print("\n--------operands_irq[%d]:%u---------\n", i, operands_irq[i]);       
+        operands_irq[i] = cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].content.msg.operands[i];
+        hdmitx_cec_dbg_print("\n--------operands_irq[%d]:%u---------\n", i, operands_irq[i]);
     }
     
     switch(cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].content.msg.operands[0]){
@@ -123,16 +123,16 @@ void cec_send_event_irq(void)
     case 0x35:
         break;
     default:
-        break;      
-    }	
+        break;
+    }    
     
     input_event(remote_cec_dev, EV_KEY, cec_key_map[operands_irq[0]], 1);
     input_sync(remote_cec_dev);	
     input_event(remote_cec_dev, EV_KEY, cec_key_map[operands_irq[0]], 0);
     input_sync(remote_cec_dev);
-    hdmitx_cec_dbg_print("\n--------cec_key_map[operands_irq[0]]:%d---------\n",cec_key_map[operands_irq[0]]);       		
-   	
-    hdmitx_cec_dbg_print("\n--------cec_send_event_irq---------\n");  	 	
+    hdmitx_cec_dbg_print("\n--------cec_key_map[operands_irq[0]]:%d---------\n",cec_key_map[operands_irq[0]]);
+   
+    hdmitx_cec_dbg_print("\n--------cec_send_event_irq---------\n");
 }
 
 void cec_user_control_pressed_irq(void)
@@ -143,7 +143,7 @@ void cec_user_control_pressed_irq(void)
     cec_send_event_irq();
 }
 
-void cec_user_control_released_irq(void)  
+void cec_user_control_released_irq(void)
 {
     hdmitx_cec_dbg_print("\nCEC Key released \n");
     //pcec_message->content.msg.flag = 0;
@@ -159,7 +159,7 @@ void cec_standby_irq(void)
     input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
     input_sync(remote_cec_dev);
     
-   // cec_send_event_irq();
+    //cec_send_event_irq();
 }
 
 void cec_user_control_pressed(cec_rx_message_t* pcec_message)
@@ -170,7 +170,7 @@ void cec_user_control_pressed(cec_rx_message_t* pcec_message)
     cec_send_event(pcec_message);
 }
 
-void cec_user_control_released(cec_rx_message_t* pcec_message)  
+void cec_user_control_released(cec_rx_message_t* pcec_message)
 {
     printk("\nCEC Key released \n");
     //pcec_message->content.msg.flag = 0;
