@@ -154,12 +154,12 @@ void cec_user_control_released_irq(void)
 void cec_standby_irq(void)
 {
     printk("CEC: System will be in standby mode\n");
-   // input_event(remote_cec_dev, EV_KEY, KEY_POWER, 1);
-   // input_sync(remote_cec_dev);
-   // input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
-  //  input_sync(remote_cec_dev);
+    input_event(remote_cec_dev, EV_KEY, KEY_POWER, 1);
+    input_sync(remote_cec_dev);
+    input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
+    input_sync(remote_cec_dev);
     
-    //cec_send_event_irq();
+    cec_send_event_irq();
 }
 
 void cec_user_control_pressed(cec_rx_message_t* pcec_message)
@@ -181,10 +181,10 @@ void cec_user_control_released(cec_rx_message_t* pcec_message)
 void cec_standby(cec_rx_message_t* pcec_message)
 {
     printk("CEC: System will be in standby mode\n");
- //   input_event(remote_cec_dev, EV_KEY, KEY_POWER, 1);
- //   input_sync(remote_cec_dev);
- //   input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
- //   input_sync(remote_cec_dev);
+    input_event(remote_cec_dev, EV_KEY, KEY_POWER, 1);
+    input_sync(remote_cec_dev);
+    input_event(remote_cec_dev, EV_KEY, KEY_POWER, 0);
+    input_sync(remote_cec_dev);
     
     //cec_send_event(pcec_message);
 }
