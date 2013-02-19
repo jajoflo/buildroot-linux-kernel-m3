@@ -3179,6 +3179,7 @@ static void hpd_post_process(unsigned long arg)
 
 void HDMITX_M1B_Init(hdmitx_dev_t* hdmitx_device)
 {
+    printk("HDMITX_M1B_Init");
     hdmitx_device->HWOp.SetPacket = hdmitx_m3_set_packet;
     hdmitx_device->HWOp.SetAudioInfoFrame = hdmitx_m3_setaudioinfoframe;
     hdmitx_device->HWOp.GetEDIDData = hdmitx_m3_getediddata;
