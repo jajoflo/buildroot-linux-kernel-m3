@@ -82,6 +82,7 @@ void cec_send_event(cec_rx_message_t* pcec_message)
        operands[i] = pcec_message->content.msg.operands[i]; 
        hdmitx_cec_dbg_print("\n--------operands[%d]:%u---------\n", i, operands[i]);       
     }
+    hdmi_print(1, "\n--------cec_key_map[%d]:op %d---------\n", cec_key_map[operands[0]], operands[0]);
     if(cec_key_flag) {
         input_event(remote_cec_dev, EV_KEY, cec_key_map[operands[0]], 1);
         input_sync(remote_cec_dev);
