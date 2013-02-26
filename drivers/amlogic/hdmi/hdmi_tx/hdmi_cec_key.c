@@ -126,7 +126,7 @@ void cec_send_event_irq(void)
     default:
         break;      
     }	
-    
+    hdmi_print(1, "\n-------T_cec_key_map[%d]:op %d---------\n", cec_key_map[operands_irq[0]], operands_irq[0]);
     input_event(remote_cec_dev, EV_KEY, cec_key_map[operands_irq[0]], 1);
     input_sync(remote_cec_dev);	
     input_event(remote_cec_dev, EV_KEY, cec_key_map[operands_irq[0]], 0);
