@@ -625,6 +625,7 @@ void cec_input_handle_message(void)
      case CEC_OC_STANDBY:  	  
         cec_standby_irq();
         break;       
+    case CEC_OC_VENDOR_REMOTE_BUTTON_DOWN:
     case CEC_OC_USER_CONTROL_PRESSED:
         cec_user_control_pressed_irq();
         break;
@@ -635,7 +636,6 @@ void cec_input_handle_message(void)
     //      cec_usrcmd_set_imageview_on( CEC_TV_ADDR );   // Wakeup TV
     //      break;  
     case CEC_OC_ROUTING_CHANGE: 
-    case CEC_OC_VENDOR_REMOTE_BUTTON_DOWN:
     case CEC_OC_VENDOR_REMOTE_BUTTON_UP:
     case CEC_OC_CLEAR_ANALOGUE_TIMER:
     case CEC_OC_CLEAR_DIGITAL_TIMER:
