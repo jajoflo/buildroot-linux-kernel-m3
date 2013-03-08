@@ -93,15 +93,15 @@ unsigned int menu_lang_array[] = {(((unsigned int)'c')<<16)|(((unsigned int)'h')
 
 static unsigned char * default_osd_name[16] = {
     "tv",
-    "recording 1",
-    "recording 2",
+    "XBMC 1",
+    "XBMC 2",
     "tuner 1",
     "AML STB/MID1",
     "audio system",
     "tuner 2",
     "tuner 3",
     "AML STB/MID2",
-    "recording 3",
+    "XBMC 3",
     "tunre 4",
     "AML STB/MID3",
     "reserved 1",
@@ -396,9 +396,9 @@ void cec_usr_cmd_post_process(void)
 void cec_node_init(hdmitx_dev_t* hdmitx_device)
 {
     int i, bool = 0;
-    enum _cec_log_dev_addr_e player_dev[3] = {   CEC_PLAYBACK_DEVICE_1_ADDR,
-                                                 CEC_PLAYBACK_DEVICE_2_ADDR,
-                                                 CEC_PLAYBACK_DEVICE_3_ADDR,
+    enum _cec_log_dev_addr_e player_dev[3] = {   CEC_RECORDING_DEVICE_1_ADDR,
+                                                 CEC_RECORDING_DEVICE_2_ADDR,
+                                                 CEC_RECORDING_DEVICE_3_ADDR,
                                               };
     if(!hdmitx_device->cec_func_flag)
         return ;
@@ -555,7 +555,7 @@ void cec_input_handle_message(void)
     //msg_length  = cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].msg_length;
 
     /* process messages from tv polling and cec devices */
-    printk("----OP code----: %x\n", opcode);
+    printk("----cec_input_handle_messageOP code----: %x\n", opcode);
     switch (opcode) {
     /*case CEC_OC_ACTIVE_SOURCE:
         cec_active_source(pcec_message);
@@ -626,8 +626,10 @@ void cec_input_handle_message(void)
         cec_standby_irq();
         break;       
     case CEC_OC_VENDOR_REMOTE_BUTTON_DOWN:
+         cec_user_control_pressed_irq(CEC_OC_VENDOR_REMOTE_BUTTON_DOWN);
+         break;
     case CEC_OC_USER_CONTROL_PRESSED:
-        cec_user_control_pressed_irq();
+        cec_user_control_pressed_irq(CEC_OC_USER_CONTROL_PRESSED);
         break;
     case CEC_OC_USER_CONTROL_RELEASED:
         //cec_user_control_released_irq();
@@ -672,7 +674,7 @@ void cec_input_handle_message(void)
     case CEC_OC_GET_MENU_LANGUAGE:
     case CEC_OC_GIVE_AUDIO_STATUS:
     case CEC_OC_ABORT_MESSAGE:
-        printk("CEC: not support cmd: %x\n", opcode);
+        printk("cec_input_handle_messageCEC: not support cmd: %x\n", opcode);
         break;
     default:
         break;
@@ -727,7 +729,7 @@ unsigned char check_cec_msg_valid(const cec_rx_message_t* pcec_message)
 
     opcode = pcec_message->content.msg.opcode;
     opernum = pcec_message->operand_num;
-
+    
     switch (opcode) {
         case CEC_OC_VENDOR_REMOTE_BUTTON_UP:
         case CEC_OC_STANDBY:
@@ -832,7 +834,7 @@ unsigned char check_cec_msg_valid(const cec_rx_message_t* pcec_message)
     }
 
     if ((rt == 0) & (opcode != 0)){
-        hdmirx_cec_dbg_print("CEC: opcode & opernum not match: %x, %x\n", opcode, opernum);
+        printk("CEC: opcode & opernum not match: %x, %x\n", opcode, opernum);
     }
     
     //?????rt = 1; // temporal
@@ -1410,7 +1412,7 @@ void cec_handle_message(cec_rx_message_t* pcec_message)
     unsigned char log_follower = pcec_message->content.msg.header & 0xf;    
     
     /* process messages from tv polling and cec devices */
-    printk("OP code: 0x%x\n", opcode);
+    printk("cec_handle_message OP code: 0x%x\n", opcode);
     switch (opcode) {
     case CEC_OC_ACTIVE_SOURCE:
         //cec_active_source(pcec_message);
@@ -1538,7 +1540,7 @@ void cec_handle_message(cec_rx_message_t* pcec_message)
     case CEC_OC_REPORT_AUDIO_STATUS:
     case CEC_OC_GET_MENU_LANGUAGE:
     case CEC_OC_ABORT_MESSAGE:
-        printk("CEC: not support cmd: %x\n", opcode);
+        printk("cec_handle_message CEC: not support cmd: %x\n", opcode);
         break;
     default:
         break;

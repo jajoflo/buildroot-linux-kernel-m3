@@ -80,7 +80,7 @@ void cec_send_event(cec_rx_message_t* pcec_message)
     
     for (i = 0; i < operand_num; i++ ) {
        operands[i] = pcec_message->content.msg.operands[i]; 
-       hdmi_print(1, "\n--------cec_key_map[%d]:op %d---------\n", cec_key_map[operands[i]], operands[i]);
+       hdmi_print(1, "\n--cec_send_eventcec_key_map[%d]:op %d---------\n", cec_key_map[operands[i]], operands[i]);
        hdmitx_cec_dbg_print("\n--------operands[%d]:%u---------\n", i, operands[i]);       
     }
     
@@ -99,7 +99,7 @@ void cec_send_event(cec_rx_message_t* pcec_message)
 }
 
 
-void cec_send_event_irq(void)
+void cec_send_event_irq(unsigned char opCode)
 {
     int i;
     unsigned char   operand_num_irq;
@@ -114,7 +114,7 @@ void cec_send_event_irq(void)
     for (i = 0; i < operand_num_irq; i++ )
     {
         operands_irq[i] = cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].content.msg.operands[i]; 
-        hdmitx_cec_dbg_print("\n--------operands_irq[%d]:%u---------\n", i, operands_irq[i]);       
+	printk("\n--cec_send_event_irqoperands_irq[%d]:%u---------\n", i, operands_irq[i]);       
     }
     
     switch(cec_rx_msg_buf.cec_rx_message[cec_rx_msg_buf.rx_write_pos].content.msg.operands[0]){
@@ -122,27 +122,27 @@ void cec_send_event_irq(void)
         cec_system_audio_mode_request();
         //cec_set_system_audio_mode();
         break;
-    case 0x35:
-        break;
     default:
         break;      
     }	
     hdmi_print(1, "\n-------T_cec_key_map[%d]:op %d---------\n", cec_key_map[operands_irq[0]], operands_irq[0]);
+    if(opCode == CEC_OC_VENDOR_REMOTE_BUTTON_DOWN)
+      return;
     input_event(remote_cec_dev, EV_KEY, cec_key_map[operands_irq[0]], 1);
     input_sync(remote_cec_dev);	
     input_event(remote_cec_dev, EV_KEY, cec_key_map[operands_irq[0]], 0);
     input_sync(remote_cec_dev);
-    hdmitx_cec_dbg_print("\n--------cec_key_map[operands_irq[0]]:%d---------\n",cec_key_map[operands_irq[0]]);       		
+    printk("\n---cec_send_event_irqcec_key_map[operands_irq[0]]:%d---------\n",cec_key_map[operands_irq[0]]);       		
    	
     hdmitx_cec_dbg_print("\n--------cec_send_event_irq---------\n");  	 	
 }
 
-void cec_user_control_pressed_irq(void)
+void cec_user_control_pressed_irq(unsigned char opCode)
 {
     hdmitx_cec_dbg_print("\nCEC Key pressed \n");
     //pcec_message->content.msg.flag = 1;
     //cec_key_flag = 1;
-    cec_send_event_irq();
+    cec_send_event_irq(opCode);
 }
 
 void cec_user_control_released_irq(void)  

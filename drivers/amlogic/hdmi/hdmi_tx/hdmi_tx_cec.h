@@ -548,10 +548,10 @@ void cec_report_audio_status(void);
 size_t cec_usrcmd_get_global_info(char * buf);
 void cec_usrcmd_set_dispatch(const char * buf, size_t count);
 void cec_input_handle_message(void);
-void cec_send_event_irq(void);
+void cec_send_event_irq(unsigned char opCode);
 void cec_standby_irq(void);
 void cec_user_control_released_irq(void);
-void cec_user_control_pressed_irq(void);
+void cec_user_control_pressed_irq(unsigned char opode);
 
 extern struct input_dev *remote_cec_dev;
 extern __u16 cec_key_map[];
