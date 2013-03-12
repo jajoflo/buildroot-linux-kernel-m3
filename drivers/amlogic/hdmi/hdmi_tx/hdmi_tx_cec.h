@@ -562,6 +562,7 @@ extern void cec_send_event(cec_rx_message_t* pcec_message);
 extern void cec_user_control_pressed(cec_rx_message_t* pcec_message);
 extern void cec_user_control_released(cec_rx_message_t* pcec_message);  
 extern void cec_standby(cec_rx_message_t* pcec_message);
+void cec_set_menu_status(unsigned char menusStatus);
 
 
 #endif
